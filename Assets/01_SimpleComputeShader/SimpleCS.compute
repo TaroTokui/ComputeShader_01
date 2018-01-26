@@ -1,0 +1,16 @@
+﻿// カーネル名の定義
+#pragma kernel Test
+
+#define ThreadSize 8
+
+// CPUとデータを受け渡すためのBuffer
+RWStructuredBuffer<int> _IntBuffer;
+
+// スレッド数の指定
+[numthreads(ThreadSize,1,1)]
+
+// カーネルの実装
+void Test(uint3 id : SV_DispatchThreadID)
+{
+	_IntBuffer[id.x] = id.x;
+}
