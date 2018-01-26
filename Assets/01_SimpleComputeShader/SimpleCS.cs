@@ -15,9 +15,7 @@ public class SimpleCS : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
-
-        Debug.Log(GroupSize);
+        
         // init buffer
         _IntBuffer = new ComputeBuffer(totalCount, sizeof(int));
 
@@ -41,4 +39,14 @@ public class SimpleCS : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    void OnDestroy()
+    {
+        // 使ったbufferを開放する
+        if (this._IntBuffer != null)
+        {
+            this._IntBuffer.Release();
+            this._IntBuffer = null;
+        }
+    }
 }

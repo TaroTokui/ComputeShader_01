@@ -1,14 +1,34 @@
-﻿// Each #kernel tells which function to compile; you can have many kernels
-#pragma kernel CSMain
+﻿#pragma kernel Test
+#pragma kernel StructureTest
 
-// Create a RenderTexture with enableRandomWrite flag and set it
-// with cs.SetTexture
-RWTexture2D<float4> Result;
+#define ThreadSize 8
 
-[numthreads(8,8,1)]
-void CSMain (uint3 id : SV_DispatchThreadID)
+struct MyData
 {
-	// TODO: insert actual code here!
+	float3 Thread;
+	float3 Group;
+	float Index;
+};
 
-	Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+RWStructuredBuffer<float3> _Vector3Buffer;
+RWStructuredBuffer<MyData> _MyDataBuffer;
+float _FloatValue;
+
+[numthreads(ThreadSize, 1, 1)]
+void Test(uint3 id : SV_DispatchThreadID)
+{
+	_Vector3Buffer[id.x] = id * _FloatValue;
 }
+
+
+[numthreads(ThreadSize, 1, 1)]
+void StructureTest(uint3 id : SV_DispatchThreadID,
+					uint3 tid : SV_GroupThreadID,
+					uint3 gid : SV_GroupID,
+					uint index : SV_GroupIndex)
+{
+	_MyDataBuffer[id.x].Thread = tid;
+	_MyDataBuffer[id.x].Group = gid;
+	_MyDataBuffer[id.x].Index = index;
+}
+
