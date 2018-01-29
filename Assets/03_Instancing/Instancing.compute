@@ -6,11 +6,8 @@
 
 struct CubeData
 {
-	//float3 BasePosition;
 	float3 Position;
-	//float3 Velocity;
 	float3 Albedo;
-	//float2 Index;
 };
 
 RWStructuredBuffer<CubeData> _CubeDataBuffer;
